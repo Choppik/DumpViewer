@@ -3,13 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DumpViewer.Views.UserControls"
+             xmlns:local="clr-namespace:DumpViewer.Views.UserControls" 
+             xmlns:viewmodels="clr-namespace:DumpViewer.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:DumpViewerViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <Style TargetType="TextBox" BasedOn="{StaticResource TextBox_Style}"/>
     </UserControl.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
@@ -18,7 +19,7 @@
 
         <Menu Grid.Row="0" VerticalAlignment="Top">
             <MenuItem Header="Файл">
-                <MenuItem Header="Открыть" ></MenuItem>
+                <MenuItem Header="Открыть" Command="{Binding OpenFileCommand}"></MenuItem>
             </MenuItem>
             <Separator/>
         </Menu>
@@ -26,7 +27,7 @@
             <TextBox TextWrapping="Wrap"
                      TextAlignment="Justify"
                      IsEnabled="True"
-                     Text="уевроеурое"
+                     Text="{Binding ResultStr}"
                      FontFamily="Courier New" 
                      HorizontalAlignment="Center"/>
         </Grid>
