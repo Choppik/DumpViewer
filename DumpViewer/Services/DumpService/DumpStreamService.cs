@@ -10,10 +10,10 @@ namespace DumpViewer.Services.DumpService
     {
         #region Конструкторы
         public DumpStreamService(Stream stream) : base(stream) { }
-
         public DumpStreamService(Stream stream, Encoding encoding) : base(stream, encoding) { }
-
         public DumpStreamService(Stream stream, Encoding encoding, bool leaveOpen) : base(stream, encoding, leaveOpen) { }
+        public DumpStreamService(byte[] bytes) : base(new MemoryStream(bytes)) { }
+        public DumpStreamService(string file) : base(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)) { }
 
         private int _bitsLeft = 0;
         private ulong _bits = 0;

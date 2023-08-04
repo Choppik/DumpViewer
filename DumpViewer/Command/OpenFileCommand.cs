@@ -1,4 +1,5 @@
 ﻿using DumpViewer.Command.Base;
+using DumpViewer.Services.DumpService;
 using DumpViewer.ViewModels;
 using Microsoft.Win32;
 using System.IO;
@@ -24,8 +25,8 @@ namespace DumpViewer.Command
             {
                 if (Path.GetExtension(openFile.FileName) == ".dmp")
                 {
-                    using FileStream fileStream = new(openFile.FileName, FileMode.Open);
-
+                    DumpWindows dumpWindows = new(new DumpStreamService(openFile.FileName));
+                    _dumpViewerViewModel.ResultStr = dumpWindows.NumStreams.ToString();
                 }
 
 

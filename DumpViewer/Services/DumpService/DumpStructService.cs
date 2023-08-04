@@ -54,7 +54,7 @@ namespace DumpViewer.Services.DumpService
         }
         /// <summary>
         /// Общий предок для всех ошибок, связанных с использованием Dump Struct.
-        /// Сохраняет исходный путь KSY, указывающий на элемент, предположительно виновный в
+        /// Сохраняет исходный путь DS, указывающий на элемент, предположительно виновный в
         /// ошибка
         /// </summary>
         public class DumpStructError : Exception
