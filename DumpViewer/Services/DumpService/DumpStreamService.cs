@@ -212,17 +212,17 @@ namespace DumpViewer.Services.DumpService
         /// Чтение двух байт в потоке взависимости от порядка типа short
         /// </summary>
         /// <returns>Возвращает байты в нужном порядке и определенного типа</returns>
-        public short ReadS2() => _isLittleEndian ? BitConverter.ToInt16(ReadBytesNormalisedBigEndian(2), 0) : BitConverter.ToInt16(ReadBytesNormalisedLittleEndian(2), 0);
+        public short ReadS2() => _isLittleEndian ? BitConverter.ToInt16(ReadBytesNormalisedLittleEndian(2), 0) : BitConverter.ToInt16(ReadBytesNormalisedBigEndian(2), 0);
         /// <summary>
         /// Чтение четырех байт в потоке взависимости от порядка типа int
         /// </summary>
         /// <returns>Возвращает байты в нужном порядке и определенного типа</returns>
-        public int ReadS4() => _isLittleEndian ? BitConverter.ToInt32(ReadBytesNormalisedBigEndian(4), 0) : BitConverter.ToInt32(ReadBytesNormalisedLittleEndian(4), 0);
+        public int ReadS4() => _isLittleEndian ? BitConverter.ToInt32(ReadBytesNormalisedLittleEndian(4), 0) : BitConverter.ToInt32(ReadBytesNormalisedBigEndian(4), 0);
         /// <summary>
         /// Чтение восьми байт в потоке взависимости от порядка типа long
         /// </summary>
         /// <returns>Возвращает байты в нужном порядке и определенного типа</returns>
-        public long ReadS8() => _isLittleEndian ? BitConverter.ToInt64(ReadBytesNormalisedBigEndian(8), 0) : BitConverter.ToInt64(ReadBytesNormalisedLittleEndian(8), 0);
+        public long ReadS8() => _isLittleEndian ? BitConverter.ToInt64(ReadBytesNormalisedLittleEndian(8), 0) : BitConverter.ToInt64(ReadBytesNormalisedBigEndian(8), 0);
         /// <summary>
         /// Чтение одного байта в потоке типа byte
         /// </summary>
@@ -232,27 +232,28 @@ namespace DumpViewer.Services.DumpService
         /// Чтение двух байт в потоке взависимости от порядка типа ushort
         /// </summary>
         /// <returns>Возвращает байты в нужном порядке и определенного типа</returns>
-        public ushort ReadU2() => _isLittleEndian ? BitConverter.ToUInt16(ReadBytesNormalisedBigEndian(2), 0) : BitConverter.ToUInt16(ReadBytesNormalisedLittleEndian(2), 0);
+        public ushort ReadU2() => _isLittleEndian ? BitConverter.ToUInt16(ReadBytesNormalisedLittleEndian(2), 0) : BitConverter.ToUInt16(ReadBytesNormalisedBigEndian(2), 0);
+        public ushort ReadU2b() => ReadUInt16();
         /// <summary>
         /// Чтение четырех байт в потоке взависимости от порядка типа uint
         /// </summary>
         /// <returns>Возвращает байты в нужном порядке и определенного типа</returns>
-        public uint ReadU4() => _isLittleEndian ? BitConverter.ToUInt32(ReadBytesNormalisedBigEndian(4), 0) : BitConverter.ToUInt32(ReadBytesNormalisedLittleEndian(4), 0);
+        public uint ReadU4() => _isLittleEndian ? BitConverter.ToUInt32(ReadBytesNormalisedLittleEndian(4), 0) : BitConverter.ToUInt32(ReadBytesNormalisedBigEndian(4), 0);
         /// <summary>
         /// Чтение восьми байт в потоке взависимости от порядка типа long
         /// </summary>
         /// <returns>Возвращает байты в нужном порядке и определенного типа</returns>
-        public ulong ReadU8() => _isLittleEndian ? BitConverter.ToUInt64(ReadBytesNormalisedBigEndian(8), 0) : BitConverter.ToUInt64(ReadBytesNormalisedLittleEndian(8), 0);
+        public ulong ReadU8() => _isLittleEndian ? BitConverter.ToUInt64(ReadBytesNormalisedLittleEndian(8), 0) : BitConverter.ToUInt64(ReadBytesNormalisedBigEndian(8), 0);
         /// <summary>
         /// Чтение четырех байт в потоке взависимости от порядка типа float
         /// </summary>
         /// <returns>Возвращает байты в нужном порядке и определенного типа</returns>
-        public float ReadF4() => _isLittleEndian ? BitConverter.ToSingle(ReadBytesNormalisedLittleEndian(4), 0) : BitConverter.ToSingle(ReadBytesNormalisedLittleEndian(4), 0);
+        public float ReadF4() => _isLittleEndian ? BitConverter.ToSingle(ReadBytesNormalisedLittleEndian(4), 0) : BitConverter.ToSingle(ReadBytesNormalisedBigEndian(4), 0);
         /// <summary>
         /// Чтение восьми байт в потоке взависимости от порядка типа double
         /// </summary>
         /// <returns>Возвращает байты в нужном порядке и определенного типа</returns>
-        public double ReadF8() => _isLittleEndian ? BitConverter.ToDouble(ReadBytesNormalisedBigEndian(8), 0) : BitConverter.ToDouble(ReadBytesNormalisedLittleEndian(8), 0);
+        public double ReadF8() => _isLittleEndian ? BitConverter.ToDouble(ReadBytesNormalisedLittleEndian(8), 0) : BitConverter.ToDouble(ReadBytesNormalisedBigEndian(8), 0);
         #endregion
 
         #region Невыровненные биты значений

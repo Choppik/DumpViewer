@@ -6,13 +6,7 @@ namespace DumpViewer.Services.DumpService
     public abstract class DumpStructService
     {
         protected DumpStreamService m_io;
-        public DumpStreamService M_Io
-        {
-            get
-            {
-                return m_io;
-            }
-        }
+        public DumpStreamService M_Io { get => m_io; }
 
         public DumpStructService(DumpStreamService io)
         {
