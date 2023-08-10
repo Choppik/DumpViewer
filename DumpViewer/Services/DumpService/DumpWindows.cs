@@ -11,63 +11,32 @@ namespace DumpViewer.Services.DumpService
     public class DumpWindows : DumpStructService
     {
         private bool f_streams;
-        private List<Dir> _streams;
-        public List<Dir> Streams
-        {
-            get
-            {
-                if (f_streams)
-                    return _streams;
-                long _pos = m_io.Pos;
-                m_io.Seek(MinorVersion);
-                _streams = new();
-                for (var i = 0; i < MajorVersion; i++)
-                {
-                    _streams.Add(new(m_io, this, m_root));
-                }
-                m_io.Seek(_pos);
-                f_streams = true;
-                return _streams;
-            }
-        }
+        
         private byte[] _signature;
         private byte[] _validDump;
-        //private uint _sign;
-        //private ushort _version;
         private uint _majorVersion;
         private uint _minorVersion;
-        private uint _directoryTableBase;
-        private uint _pfnDataBase;
+        private ulong _directoryTableBase;
+        private ulong _pfnDataBase;
+        private ulong _psLoadedModuleList;
+        private ulong _psActiveProcessHead;
+        private MachineImageType _machineImageType;
+        private uint _numberProcessors;
+        private uint[] _bugCheckParameters;
         private uint _bugCheckCode;
         private DumpWindows m_root;
         private DumpStructService m_parent;
         public byte[] Signature { get { return _signature; } }
         public byte[] ValidDump { get { return _validDump; } }
-        //public uint Sign { get { return _sign; } }
-        /// <summary>
-        /// Версия формата минидампа. Младшее слово — MINIDUMP_VERSION. Старшее слово — это внутреннее значение, зависящее от реализации
-        /// </summary>
-        //public ushort Version { get { return _version; } }
-        /// <summary>
-        /// Количество потоков в каталоге минидампа
-        /// </summary>
         public uint MajorVersion { get { return _majorVersion; } }
-        /// <summary>
-        /// Базовый RVA каталога минидампа. Каталог представляет собой массив структур MINIDUMP_DIRECTORY.
-        /// </summary>
         public uint MinorVersion { get { return _minorVersion; } }
-        /// <summary>
-        /// Контрольная сумма файла минидампа. Этот член может быть нулевым
-        /// </summary>
-        public uint DirectoryTableBase { get { return _directoryTableBase; } }
-        /// <summary>
-        /// Время и дата в формате time_t
-        /// </summary>
-        public uint PfnDataBase { get { return _pfnDataBase; } }
-        /// <summary>
-        /// Одно или несколько значений перечисляемого типа MINIDUMP_TYPE
-        /// </summary>
+        public ulong DirectoryTableBase { get { return _directoryTableBase; } }
+        public ulong PfnDataBase { get { return _pfnDataBase; } }
+        public ulong PsLoadedModuleList { get { return _psLoadedModuleList; } }
+        public ulong PsActiveProcessHead { get { return _psActiveProcessHead; } }
+        public ulong NumberProcessors { get { return _numberProcessors; } }
         public uint BugCheckCode { get { return _bugCheckCode; } }
+        public uint[] BugCheckParameters { get { return _bugCheckParameters; } }
         public DumpWindows M_Root { get { return m_root; } }
         public DumpStructService M_Parent { get { return m_parent; } }
         public static DumpWindows FromFile(string fileName) => new(new DumpStreamService(fileName));
@@ -124,6 +93,39 @@ namespace DumpViewer.Services.DumpService
             MdLinuxMaps = 1197932553,
             MdLinuxDsoDebug = 1197932554,
         }
+        public enum MachineImageType : uint
+        {
+            IMAGE_FILE_MACHINE_UNKNOWN = 0x0,
+            IMAGE_FILE_MACHINE_ALPHA = 0x184,
+            IMAGE_FILE_MACHINE_ALPHA64 = 0x284,
+            IMAGE_FILE_MACHINE_AM33 = 0x1d3,
+            IMAGE_FILE_MACHINE_AMD64 = 0x8664,
+            IMAGE_FILE_MACHINE_ARM = 0x1c0,
+            IMAGE_FILE_MACHINE_ARM64 = 0xaa64,
+            IMAGE_FILE_MACHINE_ARMNT = 0x1c4,
+            IMAGE_FILE_MACHINE_AXP64 = 0x284,
+            IMAGE_FILE_MACHINE_EBC = 0xebc,
+            IMAGE_FILE_MACHINE_I386 = 0x014c,
+            IMAGE_FILE_MACHINE_IA64 = 0x0200,
+            IMAGE_FILE_MACHINE_LOONGARCH32 = 0x6232,
+            IMAGE_FILE_MACHINE_LOONGARCH64 = 0x6264,
+            IMAGE_FILE_MACHINE_M32R = 0x9041,
+            IMAGE_FILE_MACHINE_MIPS16 = 0x266,
+            IMAGE_FILE_MACHINE_MIPSFPU = 0x366,
+            IMAGE_FILE_MACHINE_MIPSFPU16 = 0x466,
+            IMAGE_FILE_MACHINE_POWERPC = 0x1f0,
+            IMAGE_FILE_MACHINE_POWERPCFP = 0x1f1,
+            IMAGE_FILE_MACHINE_R4000 = 0x166,
+            IMAGE_FILE_MACHINE_RISCV32 = 0x5032,
+            IMAGE_FILE_MACHINE_RISCV64 = 0x5064,
+            IMAGE_FILE_MACHINE_RISCV128 = 0x5128,
+            IMAGE_FILE_MACHINE_SH3 = 0x1a2,
+            IMAGE_FILE_MACHINE_SH3DSP = 0x1a3,
+            IMAGE_FILE_MACHINE_SH4 = 0x1a6,
+            IMAGE_FILE_MACHINE_SH5 = 0x1a8,
+            IMAGE_FILE_MACHINE_THUMB = 0x1c2,
+            IMAGE_FILE_MACHINE_WCEMIPSV2 = 0x169,
+        }
         public DumpWindows(DumpStreamService p__io, DumpStructService p__parent = null, DumpWindows p__root = null) : base(p__io)
         {
             m_parent = p__parent;
@@ -143,16 +145,22 @@ namespace DumpViewer.Services.DumpService
             {
                 throw new ValidationNotEqualError("DUMP"u8.ToArray(), Magic2, M_Io, "/seq/1");
             }*/
-            //_sign = m_io.ReadUInt32();
-            //_version = m_io.ReadUInt16();
             _majorVersion = m_io.ReadU4();
             _minorVersion = m_io.ReadU4();
-            _directoryTableBase = m_io.ReadU4();
-            //_reser = m_io.ReadU4();
-            _pfnDataBase = m_io.ReadU4();
-            _validDump = m_io.ReadBytes(32);
-
+            _directoryTableBase = m_io.ReadU8();
+            _pfnDataBase = m_io.ReadU8();
+            _psLoadedModuleList = m_io.ReadU8();
+            _psActiveProcessHead = m_io.ReadU8();
+            _machineImageType = (MachineImageType)m_io.ReadU4();
+            _numberProcessors = m_io.ReadU4();
             _bugCheckCode = m_io.ReadU4();
+
+            _bugCheckParameters = new uint[10];
+            for (var i = 0; i < 8; i++)
+            {
+                _bugCheckParameters[i] = m_io.ReadU4();
+                var g = _bugCheckParameters[i].ToString("X");
+            }
         }
 
         /// <summary>
