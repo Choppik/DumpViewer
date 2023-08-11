@@ -35,7 +35,7 @@ namespace DumpViewer.Services.DumpService
         public ulong PsLoadedModuleList { get { return _psLoadedModuleList; } }
         public ulong PsActiveProcessHead { get { return _psActiveProcessHead; } }
         public ulong NumberProcessors { get { return _numberProcessors; } }
-        public uint BugCheckCode { get { return _bugCheckCode; } }
+        //public uint BugCheckCode { get { return _bugCheckCode; } }
         public uint[] BugCheckParameters { get { return _bugCheckParameters; } }
         public DumpWindows M_Root { get { return m_root; } }
         public DumpStructService M_Parent { get { return m_parent; } }
@@ -126,6 +126,39 @@ namespace DumpViewer.Services.DumpService
             IMAGE_FILE_MACHINE_THUMB = 0x1c2,
             IMAGE_FILE_MACHINE_WCEMIPSV2 = 0x169,
         }
+        public enum BugCheckCode : uint
+        {
+            APC_INDEX_MISMATCH = 0x00000001,
+            DEVICE_QUEUE_NOT_BUSY = 0x00000002,
+            INVALID_AFFINITY_SET = 0x00000003,
+            INVALID_DATA_ACCESS_TRAP = 0x00000004,
+            INVALID_PROCESS_ATTACH_ATTEMPT = 0x00000005,
+            INVALID_PROCESS_DETACH_ATTEMPT = 0x00000006,
+            INVALID_SOFTWARE_INTERRUPT = 0x00000007,
+            IRQL_NOT_DISPATCH_LEVEL = 0x00000008,
+            IRQL_NOT_GREATER_OR_EQUAL = 0x00000009,
+            IRQL_NOT_LESS_OR_EQUAL = 0x0000000A,
+            NO_EXCEPTION_HANDLING_SUPPORT = 0x0000000B,
+            MAXIMUM_WAIT_OBJECTS_EXCEEDED = 0x0000000C,
+            MUTEX_LEVEL_NUMBER_VIOLATION = 0x0000000D,
+            NO_USER_MODE_CONTEXT = 0x0000000E,
+            SPIN_LOCK_ALREADY_OWNED = 0x0000000F,
+            SPIN_LOCK_NOT_OWNED = 0x00000010,
+            THREAD_NOT_MUTEX_OWNER = 0x00000011,
+            TRAP_CAUSE_UNKNOWN = 0x00000012,
+            EMPTY_THREAD_REAPER_LIST = 0x00000013,
+            CREATE_DELETE_LOCK_NOT_LOCKED = 0x00000014,
+            LAST_CHANCE_CALLED_FROM_KMODE = 0x00000015,
+            CID_HANDLE_CREATION = 0x00000016,
+            CID_HANDLE_DELETION = 0x00000017,
+            REFERENCE_BY_POINTER = 0x00000018,
+            BAD_POOL_HEADER = 0x00000019,
+            MEMORY_MANAGEMENT = 0x0000001A,
+            PFN_SHARE_COUNT = 0x0000001B,
+            PFN_REFERENCE_COUNT = 0x0000001C,
+            NO_SPIN_LOCK_AVAILABLE = 0x0000001D,
+            KMODE_EXCEPTION_NOT_HANDLED = 0x0000001E,
+        }
         public DumpWindows(DumpStreamService p__io, DumpStructService p__parent = null, DumpWindows p__root = null) : base(p__io)
         {
             m_parent = p__parent;
@@ -152,8 +185,9 @@ namespace DumpViewer.Services.DumpService
             _psLoadedModuleList = m_io.ReadU8();
             _psActiveProcessHead = m_io.ReadU8();
             _machineImageType = (MachineImageType)m_io.ReadU4();
+            var h = ((uint)_machineImageType).ToString("X");
             _numberProcessors = m_io.ReadU4();
-            _bugCheckCode = m_io.ReadU4();
+            //_bugCheckCode = m_io.ReadU4();
 
             _bugCheckParameters = new uint[10];
             for (var i = 0; i < 8; i++)
