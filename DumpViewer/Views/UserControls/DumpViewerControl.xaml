@@ -24,12 +24,142 @@
             <Separator/>
         </Menu>
         <Grid Grid.Row="1" VerticalAlignment="Center" Margin="0,20,0,20">
-            <TextBox TextWrapping="Wrap"
-                     TextAlignment="Justify"
-                     IsEnabled="True"
-                     Text="{Binding ResultStr}"
-                     FontFamily="Courier New" 
-                     HorizontalAlignment="Center"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="Dump File:"/>
+                <TextBlock Text="Crash Time:"/>
+                <TextBlock Text="Bug Check String:"/>
+                <TextBlock Text="Bug Check Code:"/>
+                <TextBlock Text="Parameter 1:"/>
+                <TextBlock Text="Parameter 2:"/>
+                <TextBlock Text="Parameter 3:"/>
+                <TextBlock Text="Parameter 4:"/>
+                <TextBlock Text="Caused By Driver:"/>
+                <TextBlock Text="Caused By Address:"/>
+                <TextBlock Text="Processor:"/>
+                <TextBlock Text="Crash Address:"/>
+                <TextBlock Text="Full Path:"/>
+                <TextBlock Text="Processors Count:"/>
+                <TextBlock Text="Major Version:"/>
+                <TextBlock Text="Minor Version:"/>
+                <TextBlock Text="Dump File Size:"/>
+                <TextBlock Text="Dump File Time:"/>
+                
+            </StackPanel>
+            <StackPanel Grid.Column="1">
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding FileDump}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding СrashTime}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding BugCheckString}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding BugCheckCode}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding Parameter1}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding Parameter2}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding Parameter3}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding Parameter4}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding CausedByDriver}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding CausedByAddress}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding Processor}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding CrashAddress}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding FullPath}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding ProcessorsCount}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding MajorVersion}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding MinorVersion}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding DumpFileSize}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                <TextBox TextWrapping="Wrap"
+                         TextAlignment="Justify"
+                         IsEnabled="True"
+                         Text="{Binding DumpFileTime}" IsReadOnly="True"
+                         FontFamily="Courier New" 
+                         HorizontalAlignment="Center"/>
+                
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

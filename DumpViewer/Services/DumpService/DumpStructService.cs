@@ -5,46 +5,12 @@ namespace DumpViewer.Services.DumpService
 {
     public abstract class DumpStructService
     {
-        protected DumpStreamService m_io;
-        public DumpStreamService M_Io { get => m_io; }
+        protected DumpStreamService _stream;
+        public DumpStreamService Stream { get => _stream; }
 
-        public DumpStructService(DumpStreamService io)
+        public DumpStructService(DumpStreamService stream)
         {
-            m_io = io;
-        }
-        /// <summary>
-        /// A custom decoder interface. Implementing classes can be called from
-        /// inside a .ksy file using `process: XXX` syntax.
-        /// </summary>
-        public interface ICustomDecoder
-        {
-            /// <summary>
-            /// Decodes a given byte array, according to some custom algorithm
-            /// (specific to implementing class) and parameters given in the
-            /// constructor, returning another byte array.
-            /// </summary>
-            /// <param name="src">Source byte array.</param>
-            byte[] Decode(byte[] src);
-        }
-        /// <summary>
-        /// Ошибка, возникающая, когда порядок следования байтов по умолчанию должен определяться с помощью
-        /// переключателя, но ничего не совпадает (хотя и используемое выражение порядка байтов
-        /// подразумевает, что должен быть какой-то положительный результат)
-        /// </summary>
-        public class UndecidedEndiannessError : Exception
-        {
-            public UndecidedEndiannessError()
-                : base("Невозможно определить порядок следования байтов")
-            {
-            }
-            public UndecidedEndiannessError(string msg)
-                : base(msg)
-            {
-            }
-            public UndecidedEndiannessError(string msg, Exception inner)
-                : base(msg, inner)
-            {
-            }
+            _stream = stream;
         }
         /// <summary>
         /// Общий предок для всех ошибок, связанных с использованием Dump Struct.

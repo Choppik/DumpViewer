@@ -1,11 +1,11 @@
 ﻿using DumpViewer.Command.Base;
-using DumpViewer.Services.DumpService;
 using DumpViewer.ViewModels;
 using Microsoft.Win32;
 using System;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Windows;
-using static DumpViewer.Services.DumpService.DumpWindows;
+using static DumpViewer.Models.DumpWindows;
 
 namespace DumpViewer.Command
 {
@@ -27,30 +27,32 @@ namespace DumpViewer.Command
             {
                 if (Path.GetExtension(openFile.FileName) == ".dmp")
                 {
+                    FileInfo fileInfo = new(openFile.FileName);
                     var data = FromFile(openFile.FileName);
-                    //var bg = new SystemInfo(data.M_Io, null, data);
-                    ////data.Streams.Add(bg);
-                    //_dumpViewerViewModel.ResultStr += bg.ProcessCreateTime.ToString() + "\n";
-                    //_dumpViewerViewModel.ResultStr += bg.ProcessCreateTime.ToString() + "\n";
-                    //_dumpViewerViewModel.ResultStr += bg.ProcessCreateTime.ToString() + "\n";
-                        _dumpViewerViewModel.ResultStr += data.BugCheckCode.ToString("X") + "\n";
-                    /*foreach (var stream in data.Streams)
-                    {
-                        //_dumpViewerViewModel.ResultStr += stream.LenData.ToString() + "\n";
-                    }*/
-                    //SystemInfo h = new(new DumpStreamService(openFile.FileName));
-                    //_dumpViewerViewModel.ResultStr = data.Version.ToString();
-
-                    //_dumpViewerViewModel.ResultStr += h.ProcessorArchitecture.ToString() + "\n";
-                   /* _dumpViewerViewModel.ResultStr += data.Flags.ToString() + "\n";
-                    _dumpViewerViewModel.ResultStr += data.OfsStreams.ToString() + "\n";
-                    _dumpViewerViewModel.ResultStr += bg.StreamType.ToString() + "\n";*/
-
-
+                    _dumpViewerViewModel.FileDump = Path.GetFileName(openFile.FileName);
+                    _dumpViewerViewModel.СrashTime = "";
+                    _dumpViewerViewModel.BugCheckString = data.BugCheckCode.ToString();
+                    if (Enum.IsDefined(typeof(BugCheckCodeList), data.BugCheckCode))
+                        _dumpViewerViewModel.BugCheckCode = "0x" + ((uint)data.BugCheckCode).ToString("X8");
+                    else _dumpViewerViewModel.BugCheckCode = "";
+                    _dumpViewerViewModel.Parameter1 = data.BugCheckParameters[1].ToString("X8") + '`' + data.BugCheckParameters[0].ToString("X8");
+                    _dumpViewerViewModel.Parameter2 = data.BugCheckParameters[3].ToString("X8") + '`' + data.BugCheckParameters[2].ToString("X8");
+                    _dumpViewerViewModel.Parameter3 = data.BugCheckParameters[5].ToString("X8") + '`' + data.BugCheckParameters[4].ToString("X8");
+                    _dumpViewerViewModel.Parameter4 = data.BugCheckParameters[7].ToString("X8") + '`' + data.BugCheckParameters[6].ToString("X8");
+                    _dumpViewerViewModel.CausedByDriver = "";
+                    _dumpViewerViewModel.CausedByAddress = "";
+                    _dumpViewerViewModel.Processor = data.MachineImageType.ToString();
+                    _dumpViewerViewModel.CrashAddress = "";
+                    _dumpViewerViewModel.FullPath = openFile.FileName;
+                    _dumpViewerViewModel.ProcessorsCount = data.NumberProcessors.ToString();
+                    _dumpViewerViewModel.MajorVersion = data.MajorVersion.ToString();
+                    _dumpViewerViewModel.MinorVersion = data.MinorVersion.ToString();
+                    _dumpViewerViewModel.DumpFileSize = fileInfo.Length.ToString("D");
+                    _dumpViewerViewModel.DumpFileTime = fileInfo.CreationTime.ToString("G");
                 }
+                else if (Path.GetExtension(openFile.FileName) != ".dmp")
+                    MessageBox.Show("Открыть файл не удалось, так как он не соответствует расширению .dmp", "Открытие файла", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            else if (Path.GetExtension(openFile.FileName) != ".dmp")
-                MessageBox.Show("Открыть файл не удалось, так как он не соответствует расширению .dmp", "Открытие файла", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
