@@ -8,15 +8,21 @@
         
         <Setter Property="VerticalAlignment"
                 Value="Center" />
+        <Setter Property="HorizontalAlignment"
+                Value="Left" />
         <Setter Property="materialDesign:TextFieldAssist.UnderlineBrush"
                 Value="#FF20900B"/>
         <Setter Property="materialDesign:HintAssist.Foreground"
                 Value="#FF20900B"/>
         <Setter Property="FontWeight"
                 Value="Normal"/>
+        <Setter Property="FontFamily"
+                Value="Courier New"/>
         <Setter Property="CaretBrush"
                 Value="Black"/>
         <Setter Property="SelectionBrush"
                 Value="#FF20900B"/>
+        <Setter Property="TextAlignment"
+                Value="Justify"/>
     </Style>
 </ResourceDictionary>

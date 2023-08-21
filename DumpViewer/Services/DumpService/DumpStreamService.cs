@@ -13,16 +13,10 @@ namespace DumpViewer.Services.DumpService
         public DumpStreamService(byte[] bytes) : base(new MemoryStream(bytes)) { }
         public DumpStreamService(string file) : base(File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read)) { }
 
-        private int _bitsLeft = 0;
-        private ulong _bits = 0;
         static readonly bool _isLittleEndian = BitConverter.IsLittleEndian;
         #endregion
 
         #region Позиционирование в потоке
-        /// <summary>
-        /// Проверка на конец потока
-        /// </summary>
-        public bool IsEof { get => BaseStream.Position >= BaseStream.Length && _bitsLeft == 0; }
         /// <summary>
         /// Получить текущую позицию в потоке
         /// </summary>

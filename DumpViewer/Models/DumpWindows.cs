@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using DumpViewer.Services.DumpService;
 
 namespace DumpViewer.Models
@@ -6,8 +7,9 @@ namespace DumpViewer.Models
     /// <summary>
     /// Содержит информацию заголовка для файла минидампа
     /// </summary>
-    public class DumpWindows : DumpStructService
+    public class DumpWindows
     {
+        private DumpStreamService _stream;
         private byte[] _signature;
         private byte[] _validDump;
         private uint _majorVersion;
@@ -16,9 +18,10 @@ namespace DumpViewer.Models
         private ulong _pfnDataBase;
         private ulong _psLoadedModuleList;
         private ulong _psActiveProcessHead;
-        private MachineImageTypeList _machineImageType;
         private uint _numberProcessors;
+        private uint _versionArchitecture;
         private uint[] _bugCheckParameters;
+        private MachineImageTypeList _machineImageType;
         private BugCheckCodeList _bugCheckCode;
         /// <summary>
         /// Подпись
@@ -52,6 +55,10 @@ namespace DumpViewer.Models
         /// Виртуальный адрес, указывающий на список активных процессов
         /// </summary>
         public ulong PsActiveProcessHead { get { return _psActiveProcessHead; } }
+        /// <summary>
+        /// Версия архитектуры (32 или 64)
+        /// </summary>
+        public uint VersionArchitecture { get { return _versionArchitecture; } }
         /// <summary>
         /// Тип архитектуры процессора
         /// </summary>
@@ -373,6 +380,7 @@ namespace DumpViewer.Models
             PAGE_NOT_ZERO = 0x00000127,
             FAULTY_HARDWARE_CORRUPTED_PAGE = 0x0000012B,
             EXFAT_FILE_SYSTEM = 0x0000012C,
+            UNEXPECTED_STORE_EXCEPTION = 0x00000154,
             SYSTEM_THREAD_EXCEPTION_NOT_HANDLED_M = 0x1000007E,
             UNEXPECTED_KERNEL_MODE_TRAP_M = 0x1000007F,
             KERNEL_MODE_EXCEPTION_NOT_HANDLED_M = 0x1000008E,
@@ -381,31 +389,43 @@ namespace DumpViewer.Models
             STATUS_SYSTEM_PROCESS_TERMINATED = 0xC000021A,
             MANUALLY_INITIATED_CRASH1 = 0xDEADDEAD,
         }
-        public DumpWindows(DumpStreamService stream) : base(stream)
+        public DumpWindows(DumpStreamService stream)
         {
+            _stream = stream;
             Read();
         }
         private void Read()
         {
+            var count = 0;
             _signature = _stream.ReadBytes(4);
             if (!(DumpStreamService.ByteArrayCompare(Signature, "PAGE"u8.ToArray()) == 0))
-                throw new ValidationNotEqualError("PAGE"u8.ToArray(), Signature, Stream, "/seq/0");
+                MessageBox.Show("Открыть файл не удалось, так как он не соответствует сигнатуре PAGE.", "Открытие файла", MessageBoxButton.OK, MessageBoxImage.Error);
             _validDump = _stream.ReadBytes(4);
             if (!(DumpStreamService.ByteArrayCompare(ValidDump, "DU64"u8.ToArray()) == 0) && !(DumpStreamService.ByteArrayCompare(ValidDump, "DUMP"u8.ToArray()) == 0))
-                throw new ValidationNotEqualError("DUMP"u8.ToArray(), ValidDump, Stream, "/seq/1");
+                MessageBox.Show("Открыть файл не удалось, так как в нем нет подписи DU64 или DUMP.", "Открытие файла", MessageBoxButton.OK, MessageBoxImage.Error);
+
+            if (DumpStreamService.ByteArrayCompare(ValidDump, "DU64"u8.ToArray()) == 0)
+            {
+                _versionArchitecture = 64;
+                count = 8;
+            }
+            else if (DumpStreamService.ByteArrayCompare(ValidDump, "DUMP"u8.ToArray()) == 0)
+            {
+                _versionArchitecture = 32;
+                count = 4;
+            }
 
             _majorVersion = _stream.ReadU4();
             _minorVersion = _stream.ReadU4();
-            _directoryTableBase = _stream.ReadU8();
+            if (_versionArchitecture == 64) _directoryTableBase = _stream.ReadU8();
             _pfnDataBase = _stream.ReadU8();
             _psLoadedModuleList = _stream.ReadU8();
-            _psActiveProcessHead = _stream.ReadU8();
+            if (_versionArchitecture == 64) _psActiveProcessHead = _stream.ReadU8();
             _machineImageType = (MachineImageTypeList)_stream.ReadU4();
             _numberProcessors = _stream.ReadU4();
             _bugCheckCode = (BugCheckCodeList)_stream.ReadU4();
-
-            _bugCheckParameters = new uint[8];
-            for (var i = 0; i < 8; i++)
+            _bugCheckParameters = new uint[count];
+            for (var i = 0; i < count; i++)
             {
                 _bugCheckParameters[i] = _stream.ReadU4();
                 if (_bugCheckParameters[i] == BitConverter.ToUInt32(_signature)) i--;

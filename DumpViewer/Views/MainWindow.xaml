@@ -9,8 +9,8 @@
         d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="{Binding Path=Title}" 
-        Height="700" 
-        Width="1000" 
+        Height="600" 
+        Width="800" 
         WindowStartupLocation="CenterScreen">
     <Grid Background="#ffdadada">
         <Grid.Resources>

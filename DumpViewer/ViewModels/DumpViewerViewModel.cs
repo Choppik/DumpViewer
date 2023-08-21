@@ -6,6 +6,7 @@ namespace DumpViewer.ViewModels
 {
     public class DumpViewerViewModel : BaseViewModel
     {
+        private bool _isOpenFile = false;
         private string _fileDump = "";
         private string _сrashTime = "";
         private string _bugCheckString = "";
@@ -17,13 +18,24 @@ namespace DumpViewer.ViewModels
         private string _causedByDriver = "";
         private string _causedByAddress = "";
         private string _processor = "";
+        private string _versionArchitecture = "";
         private string _crashAddress = "";
         private string _fullPath = "";
         private string _processorsCount = "";
         private string _majorVersion = "";
         private string _minorVersion = "";
+        private string _osName = "";
         private string _dumpFileSize = "";
         private string _dumpFileTime = "";
+        public bool IsOpenFile
+        {
+            get => _isOpenFile;
+            set
+            {
+                Set(ref _isOpenFile, value);
+                OnPropertyChanged(nameof(IsOpenFile));
+            }
+        }
         public string FileDump
         {
             get => _fileDump;
@@ -123,6 +135,15 @@ namespace DumpViewer.ViewModels
                 OnPropertyChanged(nameof(Processor));
             }
         }
+        public string VersionArchitecture
+        {
+            get => _versionArchitecture;
+            set
+            {
+                Set(ref _versionArchitecture, value);
+                OnPropertyChanged(nameof(VersionArchitecture));
+            }
+        }
         public string CrashAddress
         {
             get => _crashAddress;
@@ -166,6 +187,15 @@ namespace DumpViewer.ViewModels
             {
                 Set(ref _minorVersion, value);
                 OnPropertyChanged(nameof(MinorVersion));
+            }
+        }
+        public string OsName
+        {
+            get => _osName;
+            set
+            {
+                Set(ref _osName, value);
+                OnPropertyChanged(nameof(OsName));
             }
         }
         public string DumpFileSize
