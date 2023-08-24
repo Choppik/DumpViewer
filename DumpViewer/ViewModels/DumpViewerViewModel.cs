@@ -1,5 +1,6 @@
 ﻿using DumpViewer.Command;
 using DumpViewer.ViewModels.Base;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace DumpViewer.ViewModels
@@ -11,10 +12,7 @@ namespace DumpViewer.ViewModels
         private string _сrashTime = "";
         private string _bugCheckString = "";
         private string _bugCheckCode = "";
-        private string _parameter1 = "";
-        private string _parameter2 = "";
-        private string _parameter3 = "";
-        private string _parameter4 = "";
+        private ObservableCollection<string> _parameters = new() { "", "", "", "" };
         private string _causedByDriver = "";
         private string _causedByAddress = "";
         private string _processor = "";
@@ -72,42 +70,7 @@ namespace DumpViewer.ViewModels
                 OnPropertyChanged(nameof(BugCheckCode));
             }
         }
-        public string Parameter1
-        {
-            get => _parameter1;
-            set
-            {
-                Set(ref _parameter1, value);
-                OnPropertyChanged(nameof(Parameter1));
-            }
-        }
-        public string Parameter2
-        {
-            get => _parameter2;
-            set
-            {
-                Set(ref _parameter2, value);
-                OnPropertyChanged(nameof(Parameter2));
-            }
-        }
-        public string Parameter3
-        {
-            get => _parameter3;
-            set
-            {
-                Set(ref _parameter3, value);
-                OnPropertyChanged(nameof(Parameter3));
-            }
-        }
-        public string Parameter4
-        {
-            get => _parameter4;
-            set
-            {
-                Set(ref _parameter4, value);
-                OnPropertyChanged(nameof(Parameter4));
-            }
-        }
+        public ObservableCollection<string> Parameters => _parameters;
         public string CausedByDriver
         {
             get => _causedByDriver;

@@ -403,24 +403,27 @@ namespace DumpViewer.Models
             _validDump = _stream.ReadBytes(4);
             if (!(DumpStreamService.ByteArrayCompare(ValidDump, "DU64"u8.ToArray()) == 0) && !(DumpStreamService.ByteArrayCompare(ValidDump, "DUMP"u8.ToArray()) == 0))
                 MessageBox.Show("Открыть файл не удалось, так как в нем нет подписи DU64 или DUMP.", "Открытие файла", MessageBoxButton.OK, MessageBoxImage.Error);
+            _majorVersion = _stream.ReadU4();
+            _minorVersion = _stream.ReadU4();
 
             if (DumpStreamService.ByteArrayCompare(ValidDump, "DU64"u8.ToArray()) == 0)
             {
                 _versionArchitecture = 64;
+                _directoryTableBase = _stream.ReadU8();
+                _pfnDataBase = _stream.ReadU8();
+                _psLoadedModuleList = _stream.ReadU8();
+                _psActiveProcessHead = _stream.ReadU8();
                 count = 8;
             }
             else if (DumpStreamService.ByteArrayCompare(ValidDump, "DUMP"u8.ToArray()) == 0)
             {
                 _versionArchitecture = 32;
+                _directoryTableBase = _stream.ReadU4();
+                _pfnDataBase = _stream.ReadU4();
+                _psLoadedModuleList = _stream.ReadU4();
+                _psActiveProcessHead = _stream.ReadU4();
                 count = 4;
             }
-
-            _majorVersion = _stream.ReadU4();
-            _minorVersion = _stream.ReadU4();
-            if (_versionArchitecture == 64) _directoryTableBase = _stream.ReadU8();
-            _pfnDataBase = _stream.ReadU8();
-            _psLoadedModuleList = _stream.ReadU8();
-            if (_versionArchitecture == 64) _psActiveProcessHead = _stream.ReadU8();
             _machineImageType = (MachineImageTypeList)_stream.ReadU4();
             _numberProcessors = _stream.ReadU4();
             _bugCheckCode = (BugCheckCodeList)_stream.ReadU4();

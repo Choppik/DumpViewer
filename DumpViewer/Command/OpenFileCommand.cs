@@ -30,7 +30,7 @@ namespace DumpViewer.Command
                     var data = FromFile(openFile.FileName);
                     _dumpViewerViewModel.IsOpenFile = true;
                     _dumpViewerViewModel.FileDump = Path.GetFileName(openFile.FileName);
-                    _dumpViewerViewModel.СrashTime = "";
+                    //_dumpViewerViewModel.СrashTime = "";
                     if (Enum.IsDefined(typeof(BugCheckCodeList), data.BugCheckCode))
                         _dumpViewerViewModel.BugCheckString = data.BugCheckCode.ToString();
                     else _dumpViewerViewModel.BugCheckString = "";
@@ -39,23 +39,25 @@ namespace DumpViewer.Command
                     {
                         case 64:
                         default:
-                            _dumpViewerViewModel.Parameter1 = data.BugCheckParameters[1].ToString("X8") + '`' + data.BugCheckParameters[0].ToString("X8");
-                            _dumpViewerViewModel.Parameter2 = data.BugCheckParameters[3].ToString("X8") + '`' + data.BugCheckParameters[2].ToString("X8");
-                            _dumpViewerViewModel.Parameter3 = data.BugCheckParameters[5].ToString("X8") + '`' + data.BugCheckParameters[4].ToString("X8");
-                            _dumpViewerViewModel.Parameter4 = data.BugCheckParameters[7].ToString("X8") + '`' + data.BugCheckParameters[6].ToString("X8");
+                            for (int i = 0, j = _dumpViewerViewModel.Parameters.Count - 1; i < data.BugCheckParameters.Length - 1; i += data.BugCheckParameters.Length / 4, j--)
+                            {
+                                _dumpViewerViewModel.Parameters.Add(data.BugCheckParameters[i + 1].ToString("X8") + '`' + data.BugCheckParameters[i].ToString("X8"));
+                                _dumpViewerViewModel.Parameters.RemoveAt(j);
+                            }
                             break;
                         case 32:
-                            _dumpViewerViewModel.Parameter1 = "0x" + data.BugCheckParameters[0].ToString("X8");
-                            _dumpViewerViewModel.Parameter2 = "0x" + data.BugCheckParameters[1].ToString("X8");
-                            _dumpViewerViewModel.Parameter3 = "0x" + data.BugCheckParameters[2].ToString("X8");
-                            _dumpViewerViewModel.Parameter4 = "0x" + data.BugCheckParameters[3].ToString("X8");
+                            for (int i = 0, j = _dumpViewerViewModel.Parameters.Count - 1; i < data.BugCheckParameters.Length; i++, j--)
+                            {
+                                _dumpViewerViewModel.Parameters.Add("0x" + data.BugCheckParameters[i].ToString("X8"));
+                                _dumpViewerViewModel.Parameters.RemoveAt(j);
+                            }
                             break;
                     }
-                    _dumpViewerViewModel.CausedByDriver = "";
-                    _dumpViewerViewModel.CausedByAddress = "";
+                    //_dumpViewerViewModel.CausedByDriver = "";
+                    //_dumpViewerViewModel.CausedByAddress = "";
                     _dumpViewerViewModel.Processor = data.MachineImageType.ToString();
                     _dumpViewerViewModel.VersionArchitecture = 'x' + data.VersionArchitecture.ToString();
-                    _dumpViewerViewModel.CrashAddress = "";
+                    //_dumpViewerViewModel.CrashAddress = "";
                     _dumpViewerViewModel.FullPath = openFile.FileName;
                     _dumpViewerViewModel.ProcessorsCount = data.NumberProcessors.ToString();
                     _dumpViewerViewModel.MajorVersion = data.MajorVersion.ToString();
