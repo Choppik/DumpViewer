@@ -117,30 +117,5 @@ namespace DumpViewer.Services.DumpService
         /// <returns>Возвращает байты в нужном порядке и определенного типа</returns>
         public double ReadF8() => !_isLittleEndian ? BitConverter.ToDouble(ReadBytesNormalisedEndian(8), 0) : BitConverter.ToDouble(ReadBytes(8), 0);
         #endregion
-
-        #region Дополнительные служебные методы
-        /// <summary>
-        /// Сравнивание двух массивов байт
-        /// </summary>
-        /// <returns>Возвращает 0, если массивы равны</returns>
-        /// <param name="a">Первый байтовый массив для сравнения</param>
-        /// <param name="b">Второй байтовый массив для сравнения</param>
-        public static int ByteArrayCompare(byte[] a, byte[] b)
-        {
-            if (a == b) return 0;
-            int al = a.Length;
-            int bl = b.Length;
-            int minLen = al < bl ? al : bl;
-
-            for (int i = 0; i < minLen; i++)
-            {
-                int cmp = a[i] - b[i];
-                if (cmp != 0) return cmp;
-            }
-
-            if (al == bl) return 0;
-            else return al - bl;
-        }
-        #endregion
     }
 }

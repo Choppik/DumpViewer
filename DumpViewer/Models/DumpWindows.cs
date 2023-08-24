@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using DumpViewer.Services.DumpService;
 
@@ -398,15 +399,15 @@ namespace DumpViewer.Models
         {
             var count = 0;
             _signature = _stream.ReadBytes(4);
-            if (!(DumpStreamService.ByteArrayCompare(Signature, "PAGE"u8.ToArray()) == 0))
+            if (!Enumerable.SequenceEqual(Signature, "PAGE"u8.ToArray()))
                 MessageBox.Show("Открыть файл не удалось, так как он не соответствует сигнатуре PAGE.", "Открытие файла", MessageBoxButton.OK, MessageBoxImage.Error);
             _validDump = _stream.ReadBytes(4);
-            if (!(DumpStreamService.ByteArrayCompare(ValidDump, "DU64"u8.ToArray()) == 0) && !(DumpStreamService.ByteArrayCompare(ValidDump, "DUMP"u8.ToArray()) == 0))
+            if (!Enumerable.SequenceEqual(ValidDump, "DU64"u8.ToArray()) && !Enumerable.SequenceEqual(ValidDump, "DUMP"u8.ToArray()))
                 MessageBox.Show("Открыть файл не удалось, так как в нем нет подписи DU64 или DUMP.", "Открытие файла", MessageBoxButton.OK, MessageBoxImage.Error);
             _majorVersion = _stream.ReadU4();
             _minorVersion = _stream.ReadU4();
 
-            if (DumpStreamService.ByteArrayCompare(ValidDump, "DU64"u8.ToArray()) == 0)
+            if (Enumerable.SequenceEqual(ValidDump, "DU64"u8.ToArray()))
             {
                 _versionArchitecture = 64;
                 _directoryTableBase = _stream.ReadU8();
@@ -415,7 +416,7 @@ namespace DumpViewer.Models
                 _psActiveProcessHead = _stream.ReadU8();
                 count = 8;
             }
-            else if (DumpStreamService.ByteArrayCompare(ValidDump, "DUMP"u8.ToArray()) == 0)
+            else if (Enumerable.SequenceEqual(ValidDump, "DUMP"u8.ToArray()))
             {
                 _versionArchitecture = 32;
                 _directoryTableBase = _stream.ReadU4();

@@ -30,7 +30,6 @@ namespace DumpViewer.Command
                     var data = FromFile(openFile.FileName);
                     _dumpViewerViewModel.IsOpenFile = true;
                     _dumpViewerViewModel.FileDump = Path.GetFileName(openFile.FileName);
-                    //_dumpViewerViewModel.СrashTime = "";
                     if (Enum.IsDefined(typeof(BugCheckCodeList), data.BugCheckCode))
                         _dumpViewerViewModel.BugCheckString = data.BugCheckCode.ToString();
                     else _dumpViewerViewModel.BugCheckString = "";
@@ -53,11 +52,8 @@ namespace DumpViewer.Command
                             }
                             break;
                     }
-                    //_dumpViewerViewModel.CausedByDriver = "";
-                    //_dumpViewerViewModel.CausedByAddress = "";
                     _dumpViewerViewModel.Processor = data.MachineImageType.ToString();
                     _dumpViewerViewModel.VersionArchitecture = 'x' + data.VersionArchitecture.ToString();
-                    //_dumpViewerViewModel.CrashAddress = "";
                     _dumpViewerViewModel.FullPath = openFile.FileName;
                     _dumpViewerViewModel.ProcessorsCount = data.NumberProcessors.ToString();
                     _dumpViewerViewModel.MajorVersion = data.MajorVersion.ToString();

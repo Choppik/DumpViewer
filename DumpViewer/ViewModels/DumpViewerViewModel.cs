@@ -9,20 +9,15 @@ namespace DumpViewer.ViewModels
     {
         private bool _isOpenFile = false;
         private string _fileDump = "";
-        private string _сrashTime = "";
         private string _bugCheckString = "";
         private string _bugCheckCode = "";
         private ObservableCollection<string> _parameters = new() { "", "", "", "" };
-        private string _causedByDriver = "";
-        private string _causedByAddress = "";
         private string _processor = "";
         private string _versionArchitecture = "";
-        private string _crashAddress = "";
         private string _fullPath = "";
         private string _processorsCount = "";
         private string _majorVersion = "";
         private string _minorVersion = "";
-        private string _osName = "";
         private string _dumpFileSize = "";
         private string _dumpFileTime = "";
         public bool IsOpenFile
@@ -41,15 +36,6 @@ namespace DumpViewer.ViewModels
             {
                 Set(ref _fileDump, value);
                 OnPropertyChanged(nameof(FileDump));
-            }
-        }
-        public string СrashTime
-        {
-            get => _сrashTime;
-            set
-            {
-                Set(ref _сrashTime, value);
-                OnPropertyChanged(nameof(СrashTime));
             }
         }
         public string BugCheckString
@@ -71,24 +57,6 @@ namespace DumpViewer.ViewModels
             }
         }
         public ObservableCollection<string> Parameters => _parameters;
-        public string CausedByDriver
-        {
-            get => _causedByDriver;
-            set
-            {
-                Set(ref _causedByDriver, value);
-                OnPropertyChanged(nameof(CausedByDriver));
-            }
-        }
-        public string CausedByAddress
-        {
-            get => _causedByAddress;
-            set
-            {
-                Set(ref _causedByAddress, value);
-                OnPropertyChanged(nameof(CausedByAddress));
-            }
-        }
         public string Processor
         {
             get => _processor;
@@ -105,15 +73,6 @@ namespace DumpViewer.ViewModels
             {
                 Set(ref _versionArchitecture, value);
                 OnPropertyChanged(nameof(VersionArchitecture));
-            }
-        }
-        public string CrashAddress
-        {
-            get => _crashAddress;
-            set
-            {
-                Set(ref _crashAddress, value);
-                OnPropertyChanged(nameof(CrashAddress));
             }
         }
         public string FullPath
@@ -150,15 +109,6 @@ namespace DumpViewer.ViewModels
             {
                 Set(ref _minorVersion, value);
                 OnPropertyChanged(nameof(MinorVersion));
-            }
-        }
-        public string OsName
-        {
-            get => _osName;
-            set
-            {
-                Set(ref _osName, value);
-                OnPropertyChanged(nameof(OsName));
             }
         }
         public string DumpFileSize
